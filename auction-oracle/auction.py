@@ -91,7 +91,7 @@ class Auction:
 
     def is_active(self):
         """Query if bidding is enabled. Returns True if bidding enabled."""
-        return self.active
+        return self.active or Auction.testcase == 6
 
     def bid(self, bidder_name, amount):
         """ Submit a bid to this auction.
@@ -119,7 +119,7 @@ class Auction:
         # fix case of letters and remove whitespace
         bidder_name = Auction.normalize(bidder_name)
         # bug: should test non-empty bidder name AFTER normalization
-        if Auction.testcase != 6 and len(bidder_name) < 1:
+        if Auction.testcase != 7 and len(bidder_name) < 1:
             raise ValueError("Bidder name may not be blank")
         if not self.accept_bid(bidder_name, amount):
             return
@@ -133,7 +133,7 @@ class Auction:
     def winner(self):
         """Return name of person who placed the highest bid."""
         # BUG: auction always uses last bidder as winner
-        if Auction.testcase == 6: 
+        if Auction.testcase == 7: 
             return self.last_bidder
         best = self.best_bid()
         for (bidder, bid) in self.bids.items():
@@ -248,9 +248,9 @@ def test_config():
 
 # This doesn't work.
 def run_tests():
-    """Run the unit tests for 6 scenarios using this class."""
+    """Run the unit tests for 7 scenarios using this class."""
     import unittest
-    for testcase in range(1, 7):
+    for testcase in range(1, 8):
         print('#'*30, f"Test Case {testcase}", '#'*30)
         Auction.testcase = testcase
         unittest.main(module=auction_test, exit=False, verbosity=2)

@@ -20,13 +20,16 @@ runtests( ) {
 			echo "CASE 3: Some error in bidding. At least one test should FAIL."
 			;;
 		4)
-			echo "CASE 4. Auction is out of control. At least one test should FAIL."
+			echo "CASE 4. Some error in auction control. At least one test should FAIL."
 			;;
 		5)
 			echo "CASE 5. Some problem is silently ignored. At least one test should FAIL."
 			;;
 		6)
-			echo "CASE 6. Two errors in auction. Do your tests detect BOTH defects?"
+			echo "CASE 6. Some error in auction control. At least one test should FAIL."
+			;;
+		7)
+			echo "CASE 7. Two errors in Auction. Do your tests detect BOTH defects?"
 		esac
         drawline
 		export TESTCASE=$testcase
