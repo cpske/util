@@ -11,23 +11,22 @@ runtests( ) {
         drawline
 		case $testcase in
     	1)
-			echo "CASE 1: All methods work according to documentation"
+			echo "CASE 1: All methods work according to documentation. Your tests should PASS."
        		;;
     	2)
-			echo "CASE 2: Rejects bids where bid == best_bid()+increment"
+			echo "CASE 2: Some error in bidding. At least one test should FAIL."
 			;;
 		3) 
-			echo "CASE 3: Accept any bid > best_bid()"
+			echo "CASE 3: Some error in bidding. At least one test should FAIL."
 			;;
 		4)
-			echo "CASE 4. Accept bid when auction is stopped [should throw AuctionError]"
+			echo "CASE 4. Auction is out of control. At least one test should FAIL."
 			;;
 		5)
-			echo "CASE 5. If bid is too low it don't do anything (no exception)"
+			echo "CASE 5. Some problem is silently ignored. At least one test should FAIL."
 			;;
 		6)
-			echo "CASE 6. Last bidder is winner, even if bid is rejected."
-			echo "        Allow bidder name to be whitespace."
+			echo "CASE 6. Two errors in auction. Do your tests detect BOTH defects?"
 		esac
         drawline
 		export TESTCASE=$testcase

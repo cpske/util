@@ -80,7 +80,6 @@ class Auction:
         self.active = False
         # get testcase from the environment
         Auction.testcase = config('TESTCASE', default=0, cast=int)
-        if Auction.testcase: print("Auction.testcase =", Auction.testcase)
 
     def start(self):
         """Enable bidding."""
@@ -229,20 +228,22 @@ class AuctionError(Exception):
     pass
 
 
-def test_name_normalization():
-    """Simple test of name normalization"""
-    for name in ["AWK!   ", "too   MuCh  Spce ", "noSpacE"]:
-        print(f"'{name}'", "=>", f"'{Auction.normalize(name)}'")
-
-
 def config(envvar, default="", cast=None):
-    """Like decouple.config, so we don't require the decouple package."""
+    """Like decouple.config, read a variable from the environment, 
+    with optional casting.  This is so we don't require the decouple package.
+    """
     value = os.getenv(envvar)
     if not value and default:
         value = default
     if value and cast:
         return cast(value)
     return value
+
+
+def test_config():
+    """Test the config method."""
+    n = config('TESTCASE', default=9, cast=int)
+    print('n is', type(n), ' n =', n)
 
 
 # This doesn't work.
@@ -254,14 +255,3 @@ def run_tests():
         Auction.testcase = testcase
         unittest.main(module=auction_test, exit=False, verbosity=2)
         input('Press ENTER...')
-
-
-def test_config():
-    """test the config method"""
-    n = config('TESTCASE', default=9, cast=int)
-    print('n is', type(n), ' n =', n)
-
-
-if __name__ == "__main__":
-    #run_tests()
-    pass
