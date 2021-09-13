@@ -15,7 +15,7 @@ runtests( ) {
 			echo "AUCTION CODE 1: All methods work according to specification. Your tests should PASS."
        		;;
 		3)
-			echo "AUCTION CODE 3: The auction is not rejecting some bids."
+			echo "AUCTION CODE 3: The auction is not rejecting some invalid bids."
 			;;
 		4 )
 			echo "AUCTION CODE 4: The auction is not enforcing state correctly."
