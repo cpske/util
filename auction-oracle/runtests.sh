@@ -29,7 +29,7 @@ runtests( ) {
 		8)
 			echo "AUCTION CODE 8: Two errors in Auction. Do your tests detect BOTH defects?"
 			;;
-    	2 | 7)
+    	*)
 			echo "AUCTION CODE ${testcase}: Some error in auction. At least one test should FAIL."
 			;;
 		esac
