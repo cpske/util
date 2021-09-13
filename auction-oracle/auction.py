@@ -121,7 +121,7 @@ class Auction:
         # fix case of letters and remove whitespace
         bidder_name = Auction.normalize(bidder_name)
         # bug: should test non-empty bidder name AFTER normalization
-        if Auction.testcase != 7 and len(bidder_name) < 1:
+        if Auction.testcase != 8 and len(bidder_name) < 1:
             raise ValueError("Bidder name may not be blank")
         if not self.accept_bid(bidder_name, amount):
             return
@@ -135,7 +135,7 @@ class Auction:
     def winner(self):
         """Return name of person who placed the highest bid."""
         # BUG: auction always uses last bidder as winner
-        if Auction.testcase == 7: 
+        if Auction.testcase == 8: 
             return self.last_bidder
         best = self.best_bid()
         for (bidder, bid) in self.bids.items():
@@ -184,35 +184,45 @@ class Auction:
             if amount <= self.best_bid() + self.increment:
                 raise AuctionError("Bid is too low")
             return True
+
         if Auction.testcase == 3:
             # accept any bid > best_bid()
             if not self.active:
                 raise AuctionError("Bidding not allowed now")
-            if amount < 0:
+            if amount <= 0:
                 raise ValueError('Amount is invalid')
             # BUG:
             if amount <= self.best_bid():
                 raise AuctionError("Bid is too low")
             return True
+
         if Auction.testcase == 4:
-            # accept bids even when auction stopped
+            # accept bids even when auction is stopped
             #if not self.active:
             #    raise AuctionError("Bidding not allowed now")
-            if amount < 0:
+            if amount <= 0:
                 raise ValueError('Amount is invalid')
             if amount < self.best_bid() + self.increment:
                 raise AuctionError("Bid is too low")
             return True
+
         if Auction.testcase == 5:
             # quietly reject too low bids w/o raising exception
             if not self.active:
                 raise AuctionError("Bidding not allowed now")
-            if amount < 0:
+            if amount <= 0:
                 return False
             if amount < self.best_bid() + self.increment:
                 return False
             return True
-        # Otherwise run the default case (all behavior correct)
+
+        if Auction.testcase == 7:
+            # non-integer bid raises exception
+            if not isinstance(amount, int):
+                raise TypeError('bid amount not integer')
+            # now perform the normal checks (below)
+
+        # Use the default case (all behavior correct)
         # Auction.testcase == 1:
         if not self.active:
             raise AuctionError("Bidding not allowed now")
@@ -250,9 +260,10 @@ def test_config():
 
 # This doesn't work.
 def run_tests():
-    """Run the unit tests for 7 scenarios using this class."""
+    """Run the unit tests for 8 scenarios using this class."""
     import unittest
-    for testcase in range(1, 8):
+    TESTCASES = 8
+    for testcase in range(1, TESTCASES+1):
         print('#'*30, f"Test Case {testcase}", '#'*30)
         Auction.testcase = testcase
         unittest.main(module=auction_test, exit=False, verbosity=2)

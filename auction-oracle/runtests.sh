@@ -7,23 +7,31 @@ drawline( ) {
     echo "----------------------------------------------------------------------"
 }
 runtests( ) {
-	for testcase in 1 2 3 4 5 6 7; do
+	for testcase in 1 2 3 4 5 6 7 8; do
+        echo ""
         drawline
 		case $testcase in
     	1)
 			echo "AUCTION CODE 1: All methods work according to specification. Your tests should PASS."
        		;;
-    	2 | 3 | 4)
-			echo "AUCTION CODE ${testcase}: Some error in auction. At least one test should FAIL."
+		3)
+			echo "AUCTION CODE 3: The auction is not rejecting some bids."
+			;;
+		4 )
+			echo "AUCTION CODE 4: The auction is not enforcing state correctly."
 			;;
 		5)
-			echo "AUCTION CODE 5: Some problem is silently ignored. At least one test should FAIL."
+			echo "AUCTION CODE 5: A problem is silently ignored. It should raise an exception."
 			;;
 		6)
-			echo "AUCTION CODE 6: Some error in auction control. At least one test should FAIL."
+			echo "AUCTION CODE 6: The auction is not setting its state correctly."
 			;;
-		7)
-			echo "AUCTION CODE 7: Two errors in Auction. Do your tests detect BOTH defects?"
+		8)
+			echo "AUCTION CODE 8: Two errors in Auction. Do your tests detect BOTH defects?"
+			;;
+    	2 | 7)
+			echo "AUCTION CODE ${testcase}: Some error in auction. At least one test should FAIL."
+			;;
 		esac
         drawline
 		export TESTCASE=$testcase
