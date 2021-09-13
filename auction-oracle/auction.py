@@ -79,7 +79,9 @@ class Auction:
         self.increment = min_increment
         self.active = False
         # get testcase from the environment
-        Auction.testcase = config('TESTCASE', default=0, cast=int)
+        Auction.testcase = config('TESTCASE', default=0, cast=int) 
+        # bug
+        self.active = (Auction.testcase == 6)
 
     def start(self):
         """Enable bidding."""
@@ -91,7 +93,7 @@ class Auction:
 
     def is_active(self):
         """Query if bidding is enabled. Returns True if bidding enabled."""
-        return self.active or Auction.testcase == 6
+        return self.active
 
     def bid(self, bidder_name, amount):
         """ Submit a bid to this auction.
