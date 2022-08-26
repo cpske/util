@@ -1,11 +1,9 @@
 #!/bin/bash
 
-if [ -f "test_bank_account.py" ]; then
-	TESTMODULE="test_bank_account.py"
-elif [ -f "bank_account_test.py" ]; then
-	TESTMODULE="bank_account_test.py"
-else
-	echo "No test code test_bank_account.py"
+TESTMODULE="test_bank_account.py"
+
+if [ ! -f $TESTMODULE ]; then
+	echo "No tests code $TESTMODULE"
 	exit 9
 fi
 
@@ -17,7 +15,7 @@ drawline( ) {
     echo "----------------------------------------------------------------------"
 }
 runtests( ) {
-	for testcase in 1 2 3 4 5 6 7 8; do
+	for testcase in 1 2 3 4 5 6 7 8 9; do
         echo ""
         drawline
         # append new element to expect. All testcases should fail except one.
@@ -56,7 +54,10 @@ showresults() {
     echo ""
     echo "Auction#  Expect  Actual"
     failures=0
-	for testcase in 1 2 3 4 5 6 7 8; do
+    
+	for testcase in ${!expect[@]}; do
+        # didn't use element 0
+        if [ $testcase -eq 0 ]; then continue; fi
         printf "%5d      %-4s     %s\n" ${testcase} ${expect[$testcase]} ${actual[$testcase]}
         if [ ${expect[$testcase]} != ${actual[$testcase]} ]; then
 			failures=$(($failures+1))

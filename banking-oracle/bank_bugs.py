@@ -22,6 +22,8 @@ BUG_DUPLICATE_CHECK = 5
 BUG_WITHDRAW_FAILS_SILENTLY = 6
 # value of uncleared checks not included in balance
 BUG_BALANCE_EXCLUDES_HOLDS = 7
+# the minimum balance requirement is not enforced  
+BUG_MINIMUM_IS_IGNORED = 9
 
 class BankAccount:
 	"""
@@ -74,7 +76,7 @@ class BankAccount:
 	def __init__(self, name: str, min_balance: float = 0.0):
 		"""Create a new account with given name.
 
-		Arguments:
+		Args:
 			name - the name for this account
 			min_balance - the minimum required balance, a non-negative number.
 				Default min balance is zero.
@@ -110,7 +112,11 @@ class BankAccount:
 		sum_holds = sum(check.value for check in self.__pending_checks)
 		# the held-back amount is max of min_balance or sum of uncleared checkes
 		if self.bug == BUG_AVAILABLE_BALANCE:
+            # available balance computed incorrectly
 			avail = self.__balance - self.min_balance - sum_holds
+		elif self.bug == BUG_MINIMUM_IS_IGNORED:
+            # no minimum balance requirement
+			avail = self.__balance - sum_holds
 		else:
 			avail = self.__balance - max(self.min_balance, sum_holds)
 		return avail if (avail>0) else 0.0
@@ -128,9 +134,9 @@ class BankAccount:
 	def deposit(self, money: Money):
 		"""Deposit money or check into the account. 
 		
-		Arguments:
+		Args:
 			money - Money or Check object with a positive value.
-		Throws:
+		Raises:
 			ValueError if value of money parameter is not positive.
 		"""
 		if money.value < 0:
@@ -138,7 +144,7 @@ class BankAccount:
 		if money.value == 0 and self.bug != BUG_DEPOSIT_ZERO:
 			raise ValueError("Value to deposit must be positive.")
 		elif money.value == 0:
-			print(f"allowing deposit of 0 due to bug {self.bug}")
+			print(f"Allow deposit of 0 due to defect {self.bug}")
 		# if it is a check, verify the check was not already deposited
 		if isinstance(money, Check):
 			# looks like a check
@@ -154,10 +160,10 @@ class BankAccount:
 	def clear_check(self, check: Check):
 		"""Mark a check as cleared so it is available for withdraw.
 
-		Arguments:
+		Args:
 			check - reference to a previously deposited check.
 		
-		Throws:
+		Raises:
 			ValueError if the check isn't in the list of checks waiting to clear
 		"""
 		if check in self.__pending_checks:
@@ -170,11 +176,11 @@ class BankAccount:
 		"""
 		Withdraw an amount from the account. 
 
-		Arguments:
+		Args:
 			amount - (number) the amount to withdraw, at most the available balance
 		Returns:
 			a Money object for the amount requested.
-		Throws:
+		Raises:
 			 ValueError if amount exceeds available balance or is not positive.
 		"""
 		if amount <= 0:
